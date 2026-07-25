@@ -5,7 +5,8 @@ import pandas as pd
 from trainer import ClusterTrainer
 from preprocessor import DataPreprocessor
 from evaluator import ClusterEvaluator
-
+from profiler import ClusterProfiler
+from personas import PersonaGenerator
 
 def main():
 
@@ -80,6 +81,18 @@ def main():
     )
 
     print(f"\nClustered dataset saved to:\n{output_path}")
+
+    print("\n[4] Profiling customer clusters...")
+
+    profiler = ClusterProfiler()
+
+    summary = profiler.profile(df)
+
+    print("\n[5] Generating customer personas...")
+
+    persona_generator = PersonaGenerator()
+
+    persona_df = persona_generator.generate(summary)
 
 
 if __name__ == "__main__":

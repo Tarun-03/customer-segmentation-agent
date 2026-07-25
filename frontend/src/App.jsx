@@ -142,6 +142,56 @@ function Styles() {
         .sc-main{ padding:24px; }
         .sc-kpis, .sc-formgrid, .sc-profilegrid{ grid-template-columns:1fr 1fr; }
       }
+
+      .sc-metricgrid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+    margin-bottom:30px;
+}
+
+.sc-plotgrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.sc-plot{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px;
+}
+
+.sc-plot img{
+    width:100%;
+    border-radius:3px;
+}
+
+.sc-plot h3{
+    margin:0 0 14px;
+    font-family:'Fraunces', serif;
+    font-size:18px;
+}
+
+.sc-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.sc-table th,
+.sc-table td{
+    padding:12px;
+    border-bottom:1px solid var(--line);
+    text-align:left;
+}
+
+.sc-table th{
+    color:var(--paper-dim);
+    font-size:12px;
+    text-transform:uppercase;
+}
+
     `}</style>
   );
 }
@@ -164,6 +214,20 @@ export default function SegmentationConsole() {
   const [predictData, setPredictData] = useState(defaultPredictState());
   const [predictResult, setPredictResult] = useState(null);
   const [predictError, setPredictError] = useState(false);
+
+  const [evaluation, setEvaluation] = useState({
+  silhouette: 0.472,
+  davies: 0.813,
+  calinski: 14284,
+  optimal_k: 4,
+
+  plots: {
+    elbow: "/customer-segmentation-agent/plots/elbow.png",
+    silhouette: "/customer-segmentation-agent/plots/silhouette.png",
+    credit: "/customer-segmentation-agent/plots/credit_score_distribution.png",
+    heatmap: "/customer-segmentation-agent/plots/correlation_heatmap.png",
+  }
+});
 
   const loadOverview = useCallback(async (base) => {
     try {
@@ -261,6 +325,7 @@ export default function SegmentationConsole() {
     { key: "overview", num: "01", label: "Overview" },
     { key: "lookup", num: "02", label: "Find Customer" },
     { key: "predict", num: "03", label: "New Customer" },
+    { key: "evaluation", num: "04", label: "Model Evaluation" },
   ];
 
   return (
@@ -304,6 +369,147 @@ export default function SegmentationConsole() {
       </aside>
 
       <main className="sc-main">
+        {view === "evaluation" && (
+
+<section>
+
+<div className="sc-eyebrow">
+Model Diagnostics
+</div>
+
+<h1 className="sc-h1">
+Model Evaluation
+</h1>
+
+<p className="sc-sub">
+Performance metrics and visual evaluation of the clustering model.
+</p>
+
+<div className="sc-metricgrid">
+
+<div className="sc-kpi">
+<div className="num">
+{evaluation.silhouette.toFixed(3)}
+</div>
+<div className="label">
+Silhouette Score
+</div>
+</div>
+
+<div className="sc-kpi">
+<div className="num">
+{evaluation.davies.toFixed(3)}
+</div>
+<div className="label">
+Davies-Bouldin
+</div>
+</div>
+
+<div className="sc-kpi">
+<div className="num">
+{evaluation.calinski.toLocaleString()}
+</div>
+<div className="label">
+Calinski-Harabasz
+</div>
+</div>
+
+<div className="sc-kpi">
+<div className="num">
+{evaluation.optimal_k}
+</div>
+<div className="label">
+Optimal K
+</div>
+</div>
+
+</div>
+
+
+<div className="sc-sectiontitle">
+Evaluation Plots
+</div>
+
+<div className="sc-plotgrid">
+
+<div className="sc-plot">
+<h3>Elbow Curve</h3>
+<img src={evaluation.plots.elbow} alt="" />
+</div>
+
+<div className="sc-plot">
+<h3>Silhouette Analysis</h3>
+<img src={evaluation.plots.silhouette} alt="" />
+</div>
+
+<div className="sc-plot">
+<h3>Credit Score Distribution</h3>
+<img src={evaluation.plots.credit} alt="" />
+</div>
+
+<div className="sc-plot">
+<h3>Correlation Heatmap</h3>
+<img src={evaluation.plots.heatmap} alt="" />
+</div>
+
+</div>
+
+
+<div
+className="sc-sectiontitle"
+style={{marginTop:40}}
+>
+Cluster Statistics
+</div>
+
+<table className="sc-table">
+
+<thead>
+
+<tr>
+
+<th>Cluster</th>
+
+<th>Customers</th>
+
+<th>Income</th>
+
+<th>Balance</th>
+
+<th>Credit Score</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{clusters.map(c=>(
+
+<tr key={c.cluster}>
+
+<td>{c.cluster}</td>
+
+<td>{c.customers}</td>
+
+<td>${Math.round(c.average_income).toLocaleString()}</td>
+
+<td>${Math.round(c.average_balance).toLocaleString()}</td>
+
+<td>{Math.round(c.average_credit_score)}</td>
+
+</tr>
+
+))}
+
+</tbody>
+
+</table>
+
+</section>
+
+)}
+
         {view === "overview" && (
           <section>
             <div className="sc-eyebrow">Portfolio Summary</div>

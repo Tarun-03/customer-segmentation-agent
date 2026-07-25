@@ -2,7 +2,7 @@ import random
 import numpy as np
 import pandas as pd
 
-from business_rules import (
+from .business_rules import (
     JOB_SALARY_RANGE,
     EDUCATION_MULTIPLIER
 )

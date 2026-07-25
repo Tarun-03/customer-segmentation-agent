@@ -1,28 +1,18 @@
 from pathlib import Path
 import pandas as pd
 
-
 class DataLoader:
-    """
-    Responsible only for loading datasets.
-    """
 
-    def __init__(self):
+    def load_dataset(self, dataset_path):
 
-        self.dataset_path = (
-            Path(__file__)
-            .resolve()
-            .parents[2]
-            / "data"
-            / "raw"
-            / "bank-additional-full.csv"
-        )
+        dataset_path = Path(dataset_path)
 
-    def load_dataset(self):
+        if not dataset_path.exists():
+            raise FileNotFoundError(f"Dataset not found: {dataset_path}")
 
-        df = pd.read_csv(
-            self.dataset_path,
-            sep=";"
-        )
+        df = pd.read_csv(dataset_path, sep=";")
+
+        print(f"Dataset loaded successfully from:\n{dataset_path}")
+        print(f"Shape: {df.shape}")
 
         return df

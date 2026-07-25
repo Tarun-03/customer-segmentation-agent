@@ -1,16 +1,27 @@
 from pathlib import Path
 
-from loader import DataLoader
-from validator import DataValidator
-from cleaner import DataCleaner
-from synthetic_features import SyntheticFeatureGenerator
+from .loader import DataLoader
+from .validator import DataValidator
+from .cleaner import DataCleaner
+from .synthetic_features import SyntheticFeatureGenerator
 
 
-def main():
+def run_data_pipeline(raw_csv_path):
+    """
+    Runs the complete data engineering pipeline.
+
+    Parameters:
+        raw_csv_path (str | Path): Path to the raw CSV file.
+
+    Returns:
+        pandas.DataFrame: Processed dataframe.
+    """
 
     print("=" * 60)
     print("CUSTOMER SEGMENTATION DATA PIPELINE")
     print("=" * 60)
+
+    raw_csv_path = Path(raw_csv_path)
 
     # Initialize modules
     loader = DataLoader()
@@ -20,7 +31,7 @@ def main():
 
     # Step 1: Load dataset
     print("\n[1] Loading dataset...")
-    df = loader.load_dataset()
+    df = loader.load_dataset(raw_csv_path)
 
     # Step 2: Validate dataset
     print("[2] Validating dataset...")
@@ -36,6 +47,7 @@ def main():
 
     # Step 5: Dataset summary
     print("[5] Dataset Summary")
+
     cleaner.dataset_summary(df)
 
     numerical, categorical = cleaner.split_columns(df)
@@ -48,9 +60,7 @@ def main():
 
     # Step 6: Save processed dataset
     output_path = (
-        Path(__file__)
-        .resolve()
-        .parents[2]
+        Path(__file__).resolve().parents[2]
         / "data"
         / "processed"
         / "enhanced_bank_dataset.csv"
@@ -66,33 +76,39 @@ def main():
     print("\nPreview of Enhanced Dataset:")
     print(df.head())
 
-
     print("\n========== SYNTHETIC FEATURE SUMMARY ==========\n")
 
     print(df["annual_income"].describe())
-
-    print("\n")
-
+    print()
     print(df["credit_score"].describe())
-
-    print("\n")
-
+    print()
     print(df["account_balance"].describe())
-
-    print("\n")
-
+    print()
     print(df["digital_banking_score"].describe())
 
     print("\nProducts Distribution")
-
     print(df["number_of_products"].value_counts().sort_index())
 
     print("\nTransactions Distribution")
-
     print(df["monthly_transactions"].describe())
 
     print("\nPipeline completed successfully.")
     print("=" * 60)
+
+    return df
+
+
+def main():
+    project_root = Path(__file__).resolve().parents[2]
+
+    raw_csv = (
+        project_root
+        / "data"
+        / "raw"
+        / "bank-additional-full.csv"
+    )
+
+    run_data_pipeline(raw_csv)
 
 
 if __name__ == "__main__":

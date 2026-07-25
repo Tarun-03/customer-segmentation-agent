@@ -2,14 +2,24 @@ from pathlib import Path
 
 import pandas as pd
 
-from trainer import ClusterTrainer
-from preprocessor import DataPreprocessor
-from evaluator import ClusterEvaluator
-from profiler import ClusterProfiler
-from personas import PersonaGenerator
-from recommendation import RecommendationEngine
+from .trainer import ClusterTrainer
+from .preprocessor import DataPreprocessor
+from .evaluator import ClusterEvaluator
+from .profiler import ClusterProfiler
+from .personas import PersonaGenerator
+from .recommendation import RecommendationEngine
 
-def main():
+
+def run_segmentation_pipeline(processed_df):
+    """
+    Runs the complete customer segmentation pipeline.
+
+    Parameters:
+        processed_df (pd.DataFrame): Enhanced dataset from the data engineering pipeline.
+
+    Returns:
+        dict: Contains clustered dataset, summary, personas and recommendations.
+    """
 
     print("=" * 60)
     print("CUSTOMER SEGMENTATION PIPELINE")
@@ -17,30 +27,20 @@ def main():
 
     project_root = Path(__file__).resolve().parents[2]
 
-    dataset_path = (
-        project_root
-        / "data"
-        / "processed"
-        / "enhanced_bank_dataset.csv"
-    )
+    df = processed_df.copy()
 
-    print("\n[1] Loading dataset...")
+    print(f"\nDataset Shape : {df.shape}")
 
-    df = pd.read_csv(dataset_path)
-
-    print(f"Dataset Shape : {df.shape}")
-
-    print("\n[2] Preprocessing dataset...")
+    print("\n[1] Preprocessing dataset...")
 
     preprocessor = DataPreprocessor(df)
 
     X_processed, transformer = preprocessor.preprocess()
 
     print("Preprocessing completed successfully.")
-
     print(f"Processed Shape : {X_processed.shape}")
 
-    print("\n[3] Evaluating optimal number of clusters...")
+    print("\n[2] Evaluating optimal number of clusters...")
 
     evaluator = ClusterEvaluator()
 
@@ -54,14 +54,7 @@ def main():
     print(f"Final K Used: {final_k}")
     print("=" * 60)
 
-    print(
-        project_root
-        / "data"
-        / "outputs"
-        / "plots"
-    )
-
-    trainer = ClusterTrainer(n_clusters=4)
+    trainer = ClusterTrainer(n_clusters=final_k)
 
     trainer.save_preprocessor(transformer)
 
@@ -76,30 +69,59 @@ def main():
         / "clustered_customers.csv"
     )
 
-    df.to_csv(
-        output_path,
-        index=False
-    )
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    df.to_csv(output_path, index=False)
 
     print(f"\nClustered dataset saved to:\n{output_path}")
 
-    print("\n[4] Profiling customer clusters...")
+    print("\n[3] Profiling customer clusters...")
 
     profiler = ClusterProfiler()
 
     summary = profiler.profile(df)
 
-    print("\n[5] Generating customer personas...")
+    print("\n[4] Generating customer personas...")
 
     persona_generator = PersonaGenerator()
 
     persona_df = persona_generator.generate(summary)
 
-    print("\n[6] Generating recommendations...")
+    print("\n[5] Generating recommendations...")
 
     recommendation_engine = RecommendationEngine()
 
     recommendation_df = recommendation_engine.generate(persona_df)
+
+    print("\nSegmentation pipeline completed successfully.")
+    print("=" * 60)
+
+    return {
+        "clustered_df": df,
+        "summary_df": summary,
+        "persona_df": persona_df,
+        "recommendation_df": recommendation_df,
+        "model": model,
+        "transformer": transformer,
+    }
+
+
+def main():
+
+    project_root = Path(__file__).resolve().parents[2]
+
+    dataset_path = (
+        project_root
+        / "data"
+        / "processed"
+        / "enhanced_bank_dataset.csv"
+    )
+
+    print("\nLoading processed dataset...")
+
+    df = pd.read_csv(dataset_path)
+
+    run_segmentation_pipeline(df)
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 from fastapi import APIRouter
-from services import CustomerService
+from .services import CustomerService
 from fastapi import HTTPException
-from schemas import CustomerInput
+from .schemas import CustomerInput
 
 router = APIRouter()
 

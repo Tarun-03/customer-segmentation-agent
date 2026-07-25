@@ -1,6 +1,6 @@
 from pathlib import Path
 import pandas as pd
-from recommendation_rules import get_personalized_recommendations
+from .recommendation_rules import get_personalized_recommendations
 
 class CustomerService:
 

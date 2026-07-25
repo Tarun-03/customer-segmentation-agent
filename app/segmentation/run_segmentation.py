@@ -7,6 +7,7 @@ from preprocessor import DataPreprocessor
 from evaluator import ClusterEvaluator
 from profiler import ClusterProfiler
 from personas import PersonaGenerator
+from recommendation import RecommendationEngine
 
 def main():
 
@@ -93,6 +94,12 @@ def main():
     persona_generator = PersonaGenerator()
 
     persona_df = persona_generator.generate(summary)
+
+    print("\n[6] Generating recommendations...")
+
+    recommendation_engine = RecommendationEngine()
+
+    recommendation_df = recommendation_engine.generate(persona_df)
 
 
 if __name__ == "__main__":

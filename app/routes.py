@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, status
+from fastapi import APIRouter, UploadFile, File, HTTPException, status
 
 from app.schemas import (
     ChatRequest,
@@ -9,6 +9,9 @@ from app.schemas import (
     RecommendationResponse,
     ChartsResponse,
 )
+from app.agent import run_agent
+from app import tools
+from app import groq_service
 
 
 router = APIRouter(
@@ -48,11 +51,30 @@ async def upload_file(
     file: UploadFile = File(...)
 ):
 
+    if not file.filename.lower().endswith(".csv"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Only .csv files are supported."
+        )
+
+    contents = await file.read()
+
+    try:
+        stats = tools.process_uploaded_csv(contents)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Could not parse CSV: {e}"
+        )
+
     return UploadResponse(
         filename=file.filename,
-        rows=0,
-        columns=0,
-        message="File uploaded successfully."
+        rows=stats["rows"],
+        columns=stats["columns"],
+        message=(
+            "File validated successfully. Note: clustering on uploaded data "
+            "isn't wired up yet -- this only confirms the file is readable."
+        )
     )
 
 
@@ -69,15 +91,9 @@ async def chat(
     request: ChatRequest
 ):
 
-    return ChatResponse(
-        response="This is a mock AI response.",
-        execution_plan=[
-            "Understand user query",
-            "Identify required tools",
-            "Generate response"
-        ],
-        results={}
-    )
+    chat_result = groq_service.generate_chat_response(request.query)
+
+    return ChatResponse(**chat_result)
 
 
 # ----------------------------------------
@@ -92,23 +108,7 @@ async def chat(
 def get_segments():
 
     return SegmentResponse(
-        segments=[
-            {
-                "id": 1,
-                "name": "Young Professionals",
-                "count": 250
-            },
-            {
-                "id": 2,
-                "name": "High Value Customers",
-                "count": 120
-            },
-            {
-                "id": 3,
-                "name": "Senior Citizens",
-                "count": 80
-            }
-        ]
+        segments=tools.segmentation_tool()
     )
 
 
@@ -124,18 +124,7 @@ def get_segments():
 def get_personas():
 
     return PersonaResponse(
-        personas=[
-            {
-                "segment": "Young Professionals",
-                "description":
-                "Early career customers with moderate income and high digital engagement."
-            },
-            {
-                "segment": "High Value Customers",
-                "description":
-                "Customers with high balances and premium banking needs."
-            }
-        ]
+        personas=tools.personas_tool()
     )
 
 
@@ -151,22 +140,7 @@ def get_personas():
 def get_recommendations():
 
     return RecommendationResponse(
-        recommendations=[
-            {
-                "segment": "Young Professionals",
-                "products": [
-                    "Travel Credit Card",
-                    "Personal Loan"
-                ]
-            },
-            {
-                "segment": "High Value Customers",
-                "products": [
-                    "Wealth Management",
-                    "Premium Savings Account"
-                ]
-            }
-        ]
+        recommendations=tools.recommendations_tool()
     )
 
 
@@ -182,10 +156,5 @@ def get_recommendations():
 def get_charts():
 
     return ChartsResponse(
-        charts={
-            "pie": {},
-            "bar": {},
-            "scatter": {},
-            "heatmap": {}
-        }
+        charts=tools.charts_tool()
     )

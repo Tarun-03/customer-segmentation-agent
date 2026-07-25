@@ -9,4 +9,4 @@ seaborn
 python-multipart
 jinja2
 openpyxl
-google-generativeai
+groq

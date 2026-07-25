@@ -1,5 +1,6 @@
 import pandas as pd
 from functools import lru_cache
+from typing import Optional
 
 DATA_DIR = "data"
 
@@ -28,7 +29,7 @@ def _load_recommendations():
 
 # ---------- EDA Tool ----------
 
-def eda_tool(cluster: int = None):
+def eda_tool(cluster: Optional[int] = None):
     """
     Performs exploratory data analysis.
     If cluster is provided, scopes the EDA to that cluster only.
@@ -140,7 +141,7 @@ def explainability_tool(customer_id: int):
 
 # ---------- Retention Tool ----------
 
-def retention_tool(cluster: int = None):
+def retention_tool(cluster: Optional[int] = None):
     """
     Flags customers at risk of disengagement based on low tenure,
     low transaction frequency, and low digital engagement relative

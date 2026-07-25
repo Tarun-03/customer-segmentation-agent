@@ -2,7 +2,7 @@ import re
 
 ACTION_KEYWORDS = {
     "explain": ["why", "explain", "basis", "reason", "criteria", "how were", "on what basis"],
-    "retention": ["at risk", "retention", "churn", "disengag", "convert", "conversion", "dormant", "re-engage"],
+    "retention": ["at risk", "at-risk", "retention", "churn", "disengag", "convert", "conversion", "dormant", "re-engage"],
     "eda": ["average", "distribution", "missing", "correlation", "how many", "count", "overview", "explore", "profile the data"],
     "segment": ["segment", "cluster", "group", "persona"],
     "lookup": ["is customer", "customer id", "customer #"]

@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+pandas
+numpy
+matplotlib
+plotly
+scikit-learn
+seaborn
+python-multipart
+jinja2
+openpyxl
+google-generativeai

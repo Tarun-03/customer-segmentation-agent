@@ -115,20 +115,34 @@ class CustomerService:
             self.personas["cluster"] == cluster
         ].iloc[0]["persona"]
 
-        cluster_products = self.recommendations[
+        cluster_products = [
+        {
+            "title": product.strip(),
+            "category": "Cluster Recommendation",
+            "reason": f"Recommended because you belong to the '{persona}' customer segment."
+        }
+        for product in self.recommendations[
             self.recommendations["cluster"] == cluster
-        ].iloc[0]["recommended_products"].split(", ")
+        ].iloc[0]["recommended_products"].split(", ")]
 
         rule_output = get_personalized_recommendations(customer_data)
 
-        final_recommendations = cluster_products + rule_output["personalized_recommendations"]
+        all_recommendations = (
+            cluster_products +
+            rule_output["personalized_recommendations"]
+        )
 
-        # Remove duplicates while preserving order
-        final_recommendations = list(dict.fromkeys(final_recommendations))
+        seen = set()
+        final_recommendations = []
+
+        for recommendation in all_recommendations:
+            if recommendation["title"] not in seen:
+                seen.add(recommendation["title"])
+                final_recommendations.append(recommendation)
 
         return {
-            "predicted_cluster": cluster,
-            "persona": persona,
-            "recommendations": final_recommendations,
-            "warnings": rule_output["warnings"]
-}
+        "predicted_cluster": cluster,
+        "persona": persona,
+        "recommendations": final_recommendations,
+        "warnings": rule_output["warnings"]
+        }

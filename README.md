@@ -1,21 +1,50 @@
-# Customer Segmentation & Personalized Banking Recommendation System
+# Customer Segmentation & Personalized Banking Recommendation AI Agent
 
-An AI-powered customer segmentation system that groups bank customers using **K-Means Clustering** and generates **personalized banking recommendations** through a rule-based recommendation engine.
+An AI-powered Retail Banking Customer Segmentation system that combines **Machine Learning**, **FastAPI**, **React**, and **LLM-powered conversational analytics** to help banks understand customer behavior, generate customer personas, recommend personalized banking products, and interact with customer data using natural language.
 
-## Features
+---
+
+# Features
 
 - Customer Segmentation using K-Means Clustering
-- Data Engineering & Synthetic Feature Generation
+- Customer Persona Generation
+- Personalized Banking Recommendations
+- AI-powered Chatbot using Groq LLM
+- Existing Customer Lookup
+- New Customer Prediction
+- Explainability Engine
 - Exploratory Data Analysis (EDA)
-- Cluster Profiling & Customer Personas
-- Rule-Based Personalized Recommendations
-- REST API using FastAPI
-- Interactive Swagger Documentation
-- Model Persistence using Joblib
+- Model Evaluation Dashboard
+- Interactive React Frontend
+- FastAPI REST API
+- Swagger Documentation
+
+---
+
+# Problem Statement
+
+This project was developed for the **Campus Hackathon 2026** under the problem statement:
+
+**Customer Segmentation & Personalization Agent for Retail Banking**
+
+The objective is to build an AI-powered agent capable of:
+
+- Performing automated Exploratory Data Analysis (EDA)
+- Segmenting customers using behavioral and financial attributes
+- Generating interpretable customer personas
+- Providing personalized banking recommendations
+- Answering natural language queries using an AI assistant
+- Producing explainable insights for customer segmentation
 
 ---
 
 # Tech Stack
+
+## Frontend
+
+- React
+- JavaScript
+- CSS
 
 ## Backend
 
@@ -27,12 +56,18 @@ An AI-powered customer segmentation system that groups bank customers using **K-
 ## Machine Learning
 
 - Scikit-learn
+- K-Means Clustering
 - Joblib
 
 ## Visualization
 
 - Matplotlib
 - Seaborn
+
+## AI
+
+- Groq API
+- Llama 3.3 (or configured Groq model)
 
 ---
 
@@ -41,26 +76,15 @@ An AI-powered customer segmentation system that groups bank customers using **K-
 ```text
 customer-segmentation-agent/
 
-│
 ├── app/
 │   ├── api/
-│   │   ├── main.py
-│   │   ├── routes.py
-│   │   ├── services.py
-│   │   ├── schemas.py
-│   │   └── recommendation_rules.py
-│   │
 │   ├── data_engineering/
-│   │
 │   ├── eda/
-│   │
-│   └── segmentation/
-│       ├── preprocessor.py
-│       ├── trainer.py
-│       ├── evaluator.py
-│       ├── profiler.py
-│       ├── personas.py
-│       └── recommendation.py
+│   ├── segmentation/
+│   ├── tools.py
+│   ├── planner.py
+│   ├── groq_service.py
+│   └── intent_parser.py
 │
 ├── data/
 │   ├── raw/
@@ -68,39 +92,87 @@ customer-segmentation-agent/
 │   ├── models/
 │   └── outputs/
 │
+├── frontend/
+│
 ├── requirements.txt
-└── README.md
+├── README.md
+└── .env
 ```
 
 ---
 
-# Installation
+# Dataset
 
-Clone the repository
+The project uses a publicly available retail banking marketing dataset obtained from UCI.
+
+Original Dataset:
+https://uci-ics-mlr-prod.aws.uci.edu/dataset/222/bank%2Bmarketing
+
+The raw dataset is placed inside:
+
+data/raw/
+
+Additional customer-centric attributes such as:
+
+- Annual Income
+- Credit Score
+- Account Balance
+- Investment Amount
+- Digital Banking Score
+- Monthly Transactions
+- Number of Products
+- Account Tenure
+
+were synthetically generated to simulate a realistic retail banking environment suitable for customer segmentation.
+
+These synthetic features were generated solely for educational and hackathon purposes.
+
+---
+
+# LLM Integration
+
+The conversational AI assistant is powered by the Groq API.
+
+Model inference is used for:
+
+- Intent understanding
+- Tool selection
+- Execution planning
+- Natural language response generation
+
+The LLM is not used for machine learning predictions.
+
+Customer segmentation is performed using a trained K-Means clustering model developed using Scikit-learn.
+
+The LLM is responsible only for orchestrating analytical tools and presenting results in natural language.
+
+---
+
+# Clone the Repository
 
 ```bash
-git clone <repository-url>
-```
+git clone https://github.com/Tarun-03/customer-segmentation-agent.git
 
-Move inside the project
-
-```bash
 cd customer-segmentation-agent
 ```
 
-Create a virtual environment
+---
 
-### Windows
+# Create Virtual Environment
+
+## Windows
 
 ```bash
 python -m venv venv
+
 venv\Scripts\activate
 ```
 
-### macOS/Linux
+## macOS / Linux
 
 ```bash
 python3 -m venv venv
+
 source venv/bin/activate
 ```
 
@@ -108,23 +180,38 @@ source venv/bin/activate
 
 # Install Dependencies
 
+Backend
+
 ```bash
 pip install -r requirements.txt
 ```
 
----
+Frontend
 
-# Dataset
+```bash
+cd frontend
 
-Place the raw banking dataset inside
-
-```text
-data/raw/
+npm install
 ```
 
 ---
 
-# Running the Pipeline
+# Environment Variables
+
+Create a `.env` file in the project root.
+
+```env
+GROQ_API_KEY=your_groq_api_key
+GROQ_MODEL_NAME=llama-3.3-70b-versatile
+```
+
+You can obtain a free Groq API key from:
+
+https://console.groq.com/
+
+---
+
+# Running the Machine Learning Pipeline
 
 ## 1. Data Engineering
 
@@ -132,7 +219,7 @@ data/raw/
 python app/data_engineering/pipeline.py
 ```
 
-Output
+Generates:
 
 ```
 data/processed/enhanced_bank_dataset.csv
@@ -146,7 +233,7 @@ data/processed/enhanced_bank_dataset.csv
 python app/eda/run_eda.py
 ```
 
-Generated plots are saved in
+Generated plots are stored in:
 
 ```
 data/outputs/plots/
@@ -154,51 +241,44 @@ data/outputs/plots/
 
 ---
 
-## 3. Train K-Means Model
+## 3. Train Segmentation Model
 
 ```bash
 python app/segmentation/run_segmentation.py
 ```
 
-Generated files
+Generated model files:
 
 ```
 data/models/kmeans_model.pkl
+
 data/models/preprocessor.pkl
 ```
 
-Generated datasets
+Generated datasets:
 
-```
-clustered_customers.csv
-cluster_summary.csv
-customer_personas.csv
-customer_recommendations.csv
-```
+- clustered_customers.csv
+- cluster_summary.csv
+- customer_personas.csv
+- customer_recommendations.csv
 
 ---
 
-# Running the API
-
-Move inside
+# Run Backend
 
 ```bash
 cd app/api
-```
 
-Run
-
-```bash
 uvicorn main:app --reload
 ```
 
-Server
+Backend:
 
 ```
 http://127.0.0.1:8000
 ```
 
-Swagger Documentation
+Swagger UI:
 
 ```
 http://127.0.0.1:8000/docs
@@ -206,199 +286,138 @@ http://127.0.0.1:8000/docs
 
 ---
 
+# Run Frontend
+
+```bash
+cd frontend
+
+npm run dev
+```
+
+Frontend:
+
+```
+http://localhost:5173
+```
+
+---
+
+# AI Agent Workflow
+
+The AI assistant follows an agentic workflow:
+
+1. Accepts a natural language query.
+2. Identifies the user's intent.
+3. Selects the appropriate analytical tool.
+4. Executes data analysis.
+5. Generates explainable insights.
+6. Returns a structured response.
+
+Available tools include:
+
+- EDA Tool
+- Segmentation Tool
+- Explainability Tool
+- Customer Lookup Tool
+- Retention Recommendation Tool
+
+---
+
+# Application Pages
+
+### Dashboard
+
+Provides an overview of customer segmentation and project metrics.
+
+### Customer Lookup
+
+Retrieve customer details using Customer ID.
+
+### New Customer Prediction
+
+Predict the cluster and persona for a new customer.
+
+### Model Evaluation
+
+Displays:
+
+- Silhouette Score
+- Davies-Bouldin Index
+- Calinski-Harabasz Score
+- Elbow Curve
+- Silhouette Analysis
+
+### EDA Metrics
+
+Includes:
+
+- Age Distribution
+- Credit Score Distribution
+- Income Distribution
+- Job Distribution
+- Products Distribution
+- Average Investment by Cluster
+
+### AI Assistant
+
+Allows users to interact with customer data using natural language and receive explainable analytical insights.
+
+---
+
 # API Endpoints
 
-## Home
-
-```
-GET /
-```
-
----
-
-## Cluster Summary
-
-```
-GET /clusters
-```
-
-Returns
-
-- Cluster Statistics
-- Average Income
-- Average Balance
-- Average Credit Score
-
----
-
-## Customer Personas
-
-```
-GET /personas
-```
-
-Returns customer personas for every cluster.
-
----
-
-## Recommendations
-
-```
-GET /recommendations
-```
-
-Returns recommended banking products for each persona.
-
----
-
-## Existing Customer Lookup
-
-```
-GET /customers/{customer_id}
-```
-
-Example
-
-```
-GET /customers/10
-```
-
-Returns
-
-```json
-{
-  "customer": {},
-  "persona": "Digital Professionals",
-  "recommendations": []
-}
-```
-
----
-
-## Predict New Customer
-
-```
-POST /predict
-```
-
-Example Request
-
-```json
-{
-  "age": 24,
-  "job": "student",
-  "marital": "single",
-  "education": "university.degree",
-  "housing": "yes",
-  "loan": "no",
-  "annual_income": 60000,
-  "credit_score": 650,
-  "account_balance": 15000,
-  "digital_banking_score": 85,
-  "monthly_transactions": 35,
-  "investment_amount": 5000,
-  "account_tenure": 2,
-  "number_of_products": 1
-}
-```
-
-Example Response
-
-```json
-{
-  "predicted_cluster": 2,
-  "persona": "Emerging Customers",
-  "recommendations": [
-    {
-      "title": "Basic Savings Account",
-      "category": "Cluster Recommendation",
-      "reason": "Recommended because you belong to the Emerging Customers segment."
-    },
-    {
-      "title": "Student Savings Account",
-      "category": "Banking",
-      "reason": "Designed for students with zero minimum balance."
-    }
-  ],
-  "warnings": [
-    "Premium credit card approval may be difficult until your credit score improves."
-  ]
-}
-```
-
----
-
-# Machine Learning Pipeline
-
-```
-Raw Dataset
-      │
-      ▼
-Data Cleaning
-      │
-      ▼
-Synthetic Feature Generation
-      │
-      ▼
-EDA
-      │
-      ▼
-Preprocessing
-(StandardScaler + OneHotEncoder)
-      │
-      ▼
-K-Means Clustering
-      │
-      ▼
-Cluster Profiling
-      │
-      ▼
-Customer Personas
-      │
-      ▼
-Recommendation Engine
-      │
-      ▼
-FastAPI
-```
-
----
-
-# Rule-Based Recommendation Engine
-
-The recommendation engine provides personalized suggestions based on customer attributes such as:
-
-- Occupation
-- Credit Score
-- Annual Income
-- Account Balance
-- Digital Banking Score
-- Account Tenure
-- Number of Products
-
-Example rules include:
-
-- Student Savings Account
-- Wealth Management
-- Platinum Credit Card
-- Emergency Savings Plan
-- Budget Tracking
-- Credit Score Improvement Program
-- Relationship Manager
-- Branch Banking Assistance
+| Method | Endpoint | Description |
+|----------|----------|-------------|
+| GET | `/` | Home |
+| GET | `/clusters` | Cluster Summary |
+| GET | `/personas` | Customer Personas |
+| GET | `/recommendations` | Banking Recommendations |
+| GET | `/customers/{customer_id}` | Existing Customer Lookup |
+| POST | `/predict` | New Customer Prediction |
+| POST | `/chat` | AI Chat Assistant |
 
 ---
 
 # Output Files
 
-| File | Description |
-|------|-------------|
-| enhanced_bank_dataset.csv | Engineered dataset |
-| clustered_customers.csv | Customers with assigned clusters |
-| cluster_summary.csv | Cluster statistics |
-| customer_personas.csv | Personas for each cluster |
-| customer_recommendations.csv | Cluster-level product recommendations |
-| kmeans_model.pkl | Trained K-Means model |
-| preprocessor.pkl | Saved preprocessing pipeline |
+The project generates:
+
+- enhanced_bank_dataset.csv
+- clustered_customers.csv
+- cluster_summary.csv
+- customer_personas.csv
+- customer_recommendations.csv
+- kmeans_model.pkl
+- preprocessor.pkl
+- EDA plots
+
+---
+
+# AI Assistance Disclosure
+
+This project was developed with the assistance of AI-powered development tools.
+
+The following tools were used during development:
+
+- **ChatGPT (OpenAI)**
+  - Code generation
+  - Debugging assistance
+  - FastAPI integration
+  - React frontend development
+  - Documentation
+  - Project architecture guidance
+
+- **Claude (Anthropic)**
+  - Code review
+  - Refactoring suggestions
+  - Prompt engineering assistance
+
+All implementation decisions, project integration, testing, debugging, and final validation were performed by the project authors.
+
+---
+
+# License
+
+This project is intended for educational and hackathon purposes.
 
 ---

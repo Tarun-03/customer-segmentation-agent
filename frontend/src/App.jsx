@@ -197,8 +197,9 @@ function Styles() {
 }
 
 export default function SegmentationConsole() {
-  const [apiBase, setApiBase] = useState("http://localhost:8000");
-  const [connected, setConnected] = useState(false);
+const [apiBase, setApiBase] = useState(
+  import.meta.env.VITE_API_URL || "http://localhost:8000"
+);  const [connected, setConnected] = useState(false);
   const [connecting, setConnecting] = useState(false);
   const [overviewError, setOverviewError] = useState(false);
   const [view, setView] = useState("overview");

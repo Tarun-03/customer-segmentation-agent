@@ -5,6 +5,7 @@ const MARITALS = ["single","married","divorced"];
 const EDUCATIONS = ["basic.4y","basic.6y","basic.9y","high.school","illiterate","professional.course","university.degree"];
 const YESNO = ["yes","no"];
 
+
 const PREDICT_FIELDS = [
   { name: "age", label: "Age", type: "number", value: 34 },
   { name: "job", label: "Job", type: "select", options: JOBS, value: "technician" },
@@ -197,6 +198,8 @@ function Styles() {
 }
 
 export default function SegmentationConsole() {
+  const PLOT_PATH = `${import.meta.env.BASE_URL}plots/`;
+
 const [apiBase, setApiBase] = useState(
   import.meta.env.VITE_API_URL || "http://localhost:8000"
 );  const [connected, setConnected] = useState(false);
@@ -226,12 +229,13 @@ const [apiBase, setApiBase] = useState(
   calinski: 14284,
   optimal_k: 4,
 
-  plots: {
-    elbow: "/customer-segmentation-agent/plots/elbow.png",
-    silhouette: "/customer-segmentation-agent/plots/silhouette.png",
-    credit: "/customer-segmentation-agent/plots/credit_score_distribution.png",
-    heatmap: "/customer-segmentation-agent/plots/correlation_heatmap.png",
-  }
+
+plots: {
+  elbow: `${PLOT_PATH}elbow.png`,
+  silhouette: `${PLOT_PATH}silhouette.png`,
+  credit: `${PLOT_PATH}credit_score_distribution.png`,
+  heatmap: `${PLOT_PATH}correlation_heatmap.png`,
+}
 
   
 });
@@ -393,30 +397,30 @@ const [apiBase, setApiBase] = useState(
     { key: "eda", num: "06", label: "EDA Metrics" },
   ];
 
-  const edaPlots = [
+ const edaPlots = [
   {
     title: "Age Distribution",
-    image: "/customer-segmentation-agent/plots/age_distribution.png",
+    image: `${PLOT_PATH}age_distribution.png`,
   },
   {
     title: "Credit Score Distribution",
-    image: "/customer-segmentation-agent/plots/credit_score_distribution.png",
+        image: `${PLOT_PATH}credit_score_distribution.png`,
   },
   {
     title: "Income Distribution",
-    image: "/customer-segmentation-agent/plots/income_distribution.png",
+    image: `${PLOT_PATH}income_distribution.png`,
   },
   {
     title: "Job Distribution",
-    image: "/customer-segmentation-agent/plots/job_distribution.png",
+    image: `${PLOT_PATH}job_distribution.png`,
   },
   {
     title: "Products Distribution",
-    image: "/customer-segmentation-agent/plots/products_distribution.png",
+    image: `${PLOT_PATH}products_distribution.png`,
   },
   {
     title: "Average Investment Amount by Cluster",
-    image: "/customer-segmentation-agent/plots/average_cluster_investment_amount.png",
+    image: `${PLOT_PATH}average_cluster_investment_amount.png`,
   },
 ];
 

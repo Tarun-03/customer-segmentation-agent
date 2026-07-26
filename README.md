@@ -413,16 +413,16 @@ The developed AI-powered Customer Segmentation Agent satisfies the key objective
 
 | Requirement | Status |
 |------------|--------|
-| **Automated data ingestion and preprocessing** | ✅ Implemented using a dedicated preprocessing and feature engineering pipeline. |
-| **Interaction via Chat, API, or Frontend** | ✅ Implemented through a React frontend, FastAPI backend, REST APIs, Swagger UI, and an AI-powered chatbot. |
-| **Dynamic EDA from user queries (missing values, distributions, correlations)** | ✅ Supported through the AI Assistant and EDA analytical tools. |
-| **Data preprocessing pipelines** | ✅ Feature engineering, preprocessing, encoding, scaling, and model persistence are implemented. |
-| **Rule-based / ML-based recommendation engine** | ✅ Personalized banking recommendations are generated using customer personas and business rules. |
-| **Segment profiling and persona generation** | ✅ K-Means clustering combined with cluster profiling generates interpretable customer personas. |
-| **Cross-selling / Up-selling recommendation logic** | ✅ Banking products are recommended based on customer segment characteristics and financial behavior. |
-| **Explainability** | ✅ The Explainability Tool provides reasons why a customer belongs to a particular segment. |
-| **Model evaluation** | ✅ Silhouette Score, Davies-Bouldin Index, Calinski-Harabasz Score, Elbow Curve, and Silhouette Analysis are presented in the Model Evaluation Dashboard. |
-| **Visualization** | ✅ Interactive dashboard with EDA plots, cluster visualizations, evaluation metrics, and analytical charts. |
+| **Automated data ingestion and preprocessing** | Implemented using a dedicated preprocessing and feature engineering pipeline. |
+| **Interaction via Chat, API, or Frontend** | Implemented through a React frontend, FastAPI backend, REST APIs, Swagger UI, and an AI-powered chatbot. |
+| **Dynamic EDA from user queries (missing values, distributions, correlations)** | Supported through the AI Assistant and EDA analytical tools. |
+| **Data preprocessing pipelines** | Feature engineering, preprocessing, encoding, scaling, and model persistence are implemented. |
+| **Rule-based / ML-based recommendation engine** | Personalized banking recommendations are generated using customer personas and business rules. |
+| **Segment profiling and persona generation** | K-Means clustering combined with cluster profiling generates interpretable customer personas. |
+| **Cross-selling / Up-selling recommendation logic** | Banking products are recommended based on customer segment characteristics and financial behavior. |
+| **Explainability** | The Explainability Tool provides reasons why a customer belongs to a particular segment. |
+| **Model evaluation** | Silhouette Score, Davies-Bouldin Index, Calinski-Harabasz Score, Elbow Curve, and Silhouette Analysis are presented in the Model Evaluation Dashboard. |
+| **Visualization** | Interactive dashboard with EDA plots, cluster visualizations, evaluation metrics, and analytical charts. |
 
 ---
 

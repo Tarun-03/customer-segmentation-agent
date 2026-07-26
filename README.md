@@ -393,6 +393,54 @@ The project generates:
 
 ---
 
+# Project Outcomes
+
+The developed AI-powered Customer Segmentation Agent satisfies the key objectives and expected deliverables of the hackathon problem statement.
+
+## Recommended Output from the Agent
+
+| Expected Output | Implementation |
+|-----------------|----------------|
+| **Clear description of each customer segment** | Customer personas are generated for each cluster using behavioral and financial characteristics. |
+| **Customers sorted into respective segments** | Every customer is assigned to a K-Means cluster and corresponding persona. |
+| **Summary of EDA performed on the data** | The EDA dashboard provides distributions, missing value analysis, correlations, and feature statistics. |
+| **Findings and insights about each segment** | Cluster profiling summarizes customer behavior, demographics, financial metrics, and investment patterns for every segment. |
+| **Recommendations for customer retention** | The recommendation engine suggests personalized banking products, cross-selling opportunities, and retention strategies for each customer segment. |
+
+---
+
+## Minimum Functional Requirements
+
+| Requirement | Status |
+|------------|--------|
+| **Automated data ingestion and preprocessing** | ✅ Implemented using a dedicated preprocessing and feature engineering pipeline. |
+| **Interaction via Chat, API, or Frontend** | ✅ Implemented through a React frontend, FastAPI backend, REST APIs, Swagger UI, and an AI-powered chatbot. |
+| **Dynamic EDA from user queries (missing values, distributions, correlations)** | ✅ Supported through the AI Assistant and EDA analytical tools. |
+| **Data preprocessing pipelines** | ✅ Feature engineering, preprocessing, encoding, scaling, and model persistence are implemented. |
+| **Rule-based / ML-based recommendation engine** | ✅ Personalized banking recommendations are generated using customer personas and business rules. |
+| **Segment profiling and persona generation** | ✅ K-Means clustering combined with cluster profiling generates interpretable customer personas. |
+| **Cross-selling / Up-selling recommendation logic** | ✅ Banking products are recommended based on customer segment characteristics and financial behavior. |
+| **Explainability** | ✅ The Explainability Tool provides reasons why a customer belongs to a particular segment. |
+| **Model evaluation** | ✅ Silhouette Score, Davies-Bouldin Index, Calinski-Harabasz Score, Elbow Curve, and Silhouette Analysis are presented in the Model Evaluation Dashboard. |
+| **Visualization** | ✅ Interactive dashboard with EDA plots, cluster visualizations, evaluation metrics, and analytical charts. |
+
+---
+
+## End-to-End Workflow
+
+1. Customer dataset ingestion
+2. Data preprocessing and feature engineering
+3. Exploratory Data Analysis (EDA)
+4. Customer segmentation using K-Means Clustering
+5. Customer persona generation
+6. Personalized banking recommendation generation
+7. Explainability for customer segments
+8. Model evaluation and visualization
+9. AI-powered conversational analytics using the Groq LLM
+10. Interactive visualization through the React dashboard
+
+---
+
 # AI Assistance Disclosure
 
 This project was developed with the assistance of AI-powered development tools.

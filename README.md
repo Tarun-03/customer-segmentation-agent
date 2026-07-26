@@ -4,6 +4,25 @@ An AI-powered Retail Banking Customer Segmentation system that combines **Machin
 
 ---
 
+> [!IMPORTANT]
+> ## Live Demo
+> 🌐 **Web Application:** https://customer-segmentation-agent.vercel.app
+>
+> The application is deployed using **Vercel (Frontend)** and **Render Free Tier (Backend)**.
+>
+> Since both services use free hosting plans, you may occasionally experience:
+> - ⏳ Initial loading delays of **30–60 seconds** while the backend wakes up from inactivity.
+> - 🔄 Temporary connection or timeout messages during periods of inactivity.
+> - 🚀 Faster responses after the first successful request, as the backend remains active for a short duration.
+>
+> If the application appears to be loading or shows a temporary connection issue:
+> 1. Wait for approximately **30–60 seconds** for the backend to wake up.
+> 2. Refresh the page and try your request again.
+>
+> Thank you for your patience!
+
+---
+
 # Features
 
 - Customer Segmentation using K-Means Clustering

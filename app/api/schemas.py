@@ -30,3 +30,14 @@ class CustomerInput(BaseModel):
     account_tenure: float
 
     number_of_products: int
+
+from typing import List, Dict, Any, Union
+from pydantic import BaseModel
+
+class ChatRequest(BaseModel):
+    query: str
+
+class ChatResponse(BaseModel):
+    response: str
+    execution_plan: List[str]
+    results: Union[Dict[str, Any], List[Dict[str, Any]]]

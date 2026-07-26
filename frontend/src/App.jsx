@@ -215,6 +215,10 @@ export default function SegmentationConsole() {
   const [predictResult, setPredictResult] = useState(null);
   const [predictError, setPredictError] = useState(false);
 
+  const [chatInput, setChatInput] = useState("");
+  const [chatMessages, setChatMessages] = useState([]);
+  const [chatLoading, setChatLoading] = useState(false);
+
   const [evaluation, setEvaluation] = useState({
   silhouette: 0.472,
   davies: 0.813,
@@ -227,6 +231,8 @@ export default function SegmentationConsole() {
     credit: "/customer-segmentation-agent/plots/credit_score_distribution.png",
     heatmap: "/customer-segmentation-agent/plots/correlation_heatmap.png",
   }
+
+  
 });
 
   const loadOverview = useCallback(async (base) => {
@@ -321,12 +327,97 @@ export default function SegmentationConsole() {
     }
   }
 
+  async function sendChat() {
+  if (!chatInput.trim()) return;
+
+  const userMessage = {
+    role: "user",
+    content: chatInput
+  };
+
+  setChatMessages(prev => [...prev, userMessage]);
+  setChatLoading(true);
+
+  const query = chatInput;
+  setChatInput("");
+
+  const base = apiBase.replace(/\/$/, "");
+
+  try {
+    const res = await fetch(base + "/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        query: query
+      })
+    });
+
+    if (!res.ok) throw new Error("Chat failed");
+
+    const data = await res.json();
+
+    setChatMessages(prev => [
+      ...prev,
+      {
+        role: "assistant",
+        content: data.response,
+        execution_plan: data.execution_plan,
+        results: data.results
+      }
+    ]);
+
+  } catch (err) {
+
+    setChatMessages(prev => [
+      ...prev,
+      {
+        role: "assistant",
+        content: "Unable to connect to the AI Assistant."
+      }
+    ]);
+
+  } finally {
+    setChatLoading(false);
+  }
+}
+
   const navItems = [
     { key: "overview", num: "01", label: "Overview" },
     { key: "lookup", num: "02", label: "Find Customer" },
     { key: "predict", num: "03", label: "New Customer" },
-    { key: "evaluation", num: "04", label: "Model Evaluation" },
+    { key: "chat", num: "04", label: "AI Assistant" },
+    { key: "evaluation", num: "05", label: "Model Evaluation" },
+    { key: "eda", num: "06", label: "EDA Metrics" },
   ];
+
+  const edaPlots = [
+  {
+    title: "Age Distribution",
+    image: "/customer-segmentation-agent/plots/age_distribution.png",
+  },
+  {
+    title: "Credit Score Distribution",
+    image: "/customer-segmentation-agent/plots/credit_score_distribution.png",
+  },
+  {
+    title: "Income Distribution",
+    image: "/customer-segmentation-agent/plots/income_distribution.png",
+  },
+  {
+    title: "Job Distribution",
+    image: "/customer-segmentation-agent/plots/job_distribution.png",
+  },
+  {
+    title: "Products Distribution",
+    image: "/customer-segmentation-agent/plots/products_distribution.png",
+  },
+  {
+    title: "Average Investment Amount by Cluster",
+    image: "/customer-segmentation-agent/plots/average_cluster_investment_amount.png",
+  },
+];
 
   return (
     <div className="sc-root">
@@ -335,7 +426,7 @@ export default function SegmentationConsole() {
       <aside className="sc-rail">
         <div className="sc-brand">
           <span className="sc-mark">§</span>
-          <div><small>Segmentation Console</small></div>
+          <div><small>Customer Intelligence</small></div>
         </div>
 
         <nav className="sc-nav">
@@ -369,6 +460,8 @@ export default function SegmentationConsole() {
       </aside>
 
       <main className="sc-main">
+
+
         {view === "evaluation" && (
 
 <section>
@@ -512,8 +605,8 @@ Cluster Statistics
 
         {view === "overview" && (
           <section>
-            <div className="sc-eyebrow">Portfolio Summary</div>
-            <h1 className="sc-h1">Customer segments, at a glance</h1>
+            <div className="sc-eyebrow">Customer Analytics</div>
+            <h1 className="sc-h1">Customer Intelligence Dashboard</h1>
             <p className="sc-sub">Clusters derived from behavioural and financial attributes, profiled and mapped to personas and product recommendations.</p>
             {overviewError && <div className="sc-banner" style={{ marginTop: 16 }}>Could not reach the API. Check the base URL and that the server is running.</div>}
 
@@ -537,7 +630,7 @@ Cluster Statistics
                 ))}
             </div>
 
-            <div className="sc-sectiontitle">Persona ledger</div>
+            <div className="sc-sectiontitle">Segment Profiles</div>
             <div className="sc-seggrid">
               {clusters.map(c => {
                 const persona = personaMap[c.cluster] || `Cluster ${c.cluster}`;
@@ -614,6 +707,137 @@ Cluster Statistics
           </section>
         )}
 
+        {view === "chat" && (
+  <section>
+    <div className="sc-eyebrow">AI Assistant</div>
+
+    <h1 className="sc-h1">
+      AI Marketing Assistant
+    </h1>
+
+    <p className="sc-sub">
+      Ask questions about customer segments, recommendations, marketing
+      strategies, and customer analytics using natural language.
+    </p>
+
+          <div
+  className="sc-panel"
+  style={{
+    marginTop: 24,
+    width: "100%",
+    maxWidth: "1100px",
+    margin: "24px auto 0",
+  }}
+>
+
+      <div
+        style={{
+          height: "400px",
+          overflowY: "auto",
+          border: "1px solid var(--line)",
+          borderRadius: "4px",
+          padding: "16px",
+          marginBottom: "20px",
+          background: "var(--ink)"
+        }}
+      >
+
+        {chatMessages.length === 0 ? (
+          <div className="sc-empty">
+            Start a conversation with the AI Assistant.
+          </div>
+        ) : (
+          chatMessages.map((msg, index) => (
+  <div
+    key={index}
+    style={{
+      display: "flex",
+      justifyContent: msg.role === "user" ? "flex-end" : "flex-start",
+      marginBottom: "16px",
+    }}
+  >
+    <div
+      style={{
+        maxWidth: "70%",
+        padding: "12px 16px",
+        borderRadius: "12px",
+        background:
+          msg.role === "user"
+            ? "var(--brass)"
+            : "var(--surface)",
+        color:
+          msg.role === "user"
+            ? "var(--ink)"
+            : "var(--paper)",
+        border:
+          msg.role === "assistant"
+            ? "1px solid var(--line)"
+            : "none",
+      }}
+    >
+      <div
+        style={{
+          fontSize: "12px",
+          fontWeight: "600",
+          marginBottom: "6px",
+          opacity: 0.8,
+        }}
+      >
+        {msg.role === "user" ? "You" : "AI Assistant"}
+      </div>
+
+      <div
+        style={{
+          whiteSpace: "pre-wrap",
+          lineHeight: 1.6,
+        }}
+      >
+        {msg.content}
+      </div>
+    </div>
+  </div>
+))
+        )}
+
+        {chatLoading && (
+  <div
+    style={{
+      color: "var(--paper-dim)",
+      marginTop: 12,
+      fontStyle: "italic"
+    }}
+  >
+    AI Assistant is thinking...
+  </div>
+)}
+
+      </div>
+
+      <div className="sc-searchrow" style={{ maxWidth: "100%" }}>
+        <input
+    placeholder="Ask anything..."
+    value={chatInput}
+    onChange={(e) => setChatInput(e.target.value)}
+    onKeyDown={(e) => {
+        if (e.key === "Enter") {
+            sendChat();
+        }
+    }}
+/>
+
+        <button
+    className="sc-btn"
+    type="button"
+    onClick={sendChat}
+>
+    Send
+</button>
+      </div>
+
+    </div>
+  </section>
+)}
+
         {view === "predict" && (
           <section>
             <div className="sc-eyebrow">Live Scoring</div>
@@ -675,6 +899,34 @@ Cluster Statistics
             )}
           </section>
         )}
+
+        {view === "eda" && (
+  <section>
+    <div className="sc-eyebrow">Exploratory Data Analysis</div>
+
+    <h1 className="sc-h1">
+      EDA Metrics
+    </h1>
+
+    <p className="sc-sub">
+      Distribution plots and exploratory visualizations generated from the
+      customer dataset.
+    </p>
+
+    <div className="sc-plotgrid" style={{ marginTop: 30 }}>
+      {edaPlots.map((plot, index) => (
+        <div className="sc-plot" key={index}>
+          <h3>{plot.title}</h3>
+
+          <img
+            src={plot.image}
+            alt={plot.title}
+          />
+        </div>
+      ))}
+    </div>
+  </section>
+)}
       </main>
     </div>
   );

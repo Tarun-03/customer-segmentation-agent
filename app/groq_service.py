@@ -22,7 +22,9 @@ import json
 
 from . import tools
 from . import agent as rule_based_agent
+from dotenv import load_dotenv
 
+load_dotenv()
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 GROQ_MODEL_NAME = os.environ.get("GROQ_MODEL_NAME", "llama-3.1-8b-instant")
@@ -289,6 +291,7 @@ def generate_chat_response(query: str) -> dict:
         try:
             return _run_groq_turn(query)
         except Exception as e:
+            # print("GROQ ERROR:", repr(e))
             fallback_result = rule_based_agent.run_agent(query)
             formatted = rule_based_agent.to_chat_response(fallback_result)
             formatted["execution_plan"] = [

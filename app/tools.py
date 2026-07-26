@@ -2,8 +2,7 @@ import pandas as pd
 from functools import lru_cache
 from typing import Optional
 
-DATA_DIR = "data"
-
+DATA_DIR = "data/processed"
 
 # ---------- Data loaders (cached so we don't re-read CSVs on every call) ----------
 

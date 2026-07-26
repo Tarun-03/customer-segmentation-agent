@@ -1,7 +1,8 @@
 from fastapi import APIRouter
 from .services import CustomerService
+from .schemas import CustomerInput, ChatRequest, ChatResponse
 from fastapi import HTTPException
-from .schemas import CustomerInput
+from app import groq_service
 
 router = APIRouter()
 
@@ -54,3 +55,8 @@ def predict(customer: CustomerInput):
     )
 
     return result
+
+@router.post("/chat", response_model=ChatResponse)
+async def chat(request: ChatRequest):
+    chat_result = groq_service.generate_chat_response(request.query)
+    return ChatResponse(**chat_result)

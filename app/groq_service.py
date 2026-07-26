@@ -96,9 +96,9 @@ _TOOL_SCHEMAS = [
         "function": {
             "name": "retention_tool",
             "description": (
-                "Get retention/churn risk information, optionally filtered "
-                "to a single cluster. If no cluster is given, returns "
-                "retention info across all clusters."
+                "Analyze customer engagement and recommend customer retention, "
+                "cross-selling, premium upgrades, investment opportunities, "
+                "loan eligibility, and next-best banking actions."
             ),
             "parameters": {
                 "type": "object",
@@ -144,8 +144,10 @@ _TOOL_SCHEMAS = [
         "function": {
             "name": "segmentation_tool",
             "description": (
-                "Get the full list of customer segments/clusters with "
-                "their summary statistics. Takes no arguments."
+                "Summarize customer segments identified by K-Means clustering. "
+                "Return personas, customer counts, business characteristics, "
+                "average financial metrics, business value, and recommended "
+                "banking products for each segment."
             ),
             "parameters": {
                 "type": "object",

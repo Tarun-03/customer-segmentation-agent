@@ -14,6 +14,7 @@ TOOL_DISPATCH = {
     "retention": tools.retention_tool,
     "eda": tools.eda_tool,
     "segment": tools.segmentation_tool,
+    "feature_engineering": tools.feature_engineering_tool,
 }
 
 

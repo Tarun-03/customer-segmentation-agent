@@ -183,3 +183,40 @@ def retention_tool(cluster: Optional[int] = None):
         "at_risk_count": len(results),
         "at_risk_customers": results
     }
+
+def feature_engineering_tool():
+    """
+    Explains the feature engineering pipeline used before K-Means clustering.
+    """
+
+    return {
+        "title": "Feature Engineering Pipeline",
+
+        "input_features": [
+            "Age",
+            "Annual Income",
+            "Credit Score",
+            "Account Balance",
+            "Digital Banking Score",
+            "Monthly Transactions",
+            "Investment Amount",
+            "Average Transaction Amount",
+            "Account Tenure",
+            "Number of Products"
+        ],
+
+        "transformations": [
+            "Handled missing values",
+            "Selected numerical banking features",
+            "Scaled numerical features using StandardScaler",
+            "Prepared feature matrix for K-Means clustering"
+        ],
+
+        "model_input": "Standardized numerical feature matrix",
+
+        "output": "Cluster labels representing customer personas",
+
+        "purpose":
+            "Prepared customer banking attributes for K-Means clustering "
+            "by cleaning, selecting and scaling the most relevant financial features."
+    }

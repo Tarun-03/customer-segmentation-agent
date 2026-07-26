@@ -39,12 +39,10 @@ _MAX_TOOL_RESULT_CHARS = 4000
 SYSTEM_INSTRUCTION = (
     "You are a retail banking analytics assistant for a customer "
     "segmentation tool. Use the available tools to answer questions about "
-    "customer segments, personas, retention risk, and individual "
+    "customer segmentation, feature engineering, data preprocessing, "
+    "EDA, customer segments, personas, retention risk, and individual "
     "customers. Always call a tool to get real numbers rather than "
-    "guessing or estimating. If a question needs a customer ID or cluster "
-    "number that wasn't given, ask for it instead of calling a tool with a "
-    "made-up value. If the question is unrelated to customer "
-    "segmentation, say so plainly instead of forcing a tool call."
+    "guessing or estimating."
 )
 
 # Groq (OpenAI-compatible) requires an explicit JSON schema per tool --
@@ -156,6 +154,21 @@ _TOOL_SCHEMAS = [
             },
         },
     },
+    {
+        "type": "function",
+        "function": {
+            "name": "feature_engineering_tool",
+            "description": (
+                "Explain the feature engineering and preprocessing pipeline "
+                "used before K-Means customer segmentation."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {},
+                "required": []
+            }
+        }
+    },
 ]
 
 _TOOL_FN_MAP = {
@@ -164,6 +177,7 @@ _TOOL_FN_MAP = {
     "retention_tool": tools.retention_tool,
     "eda_tool": tools.eda_tool,
     "segmentation_tool": tools.segmentation_tool,
+    "feature_engineering_tool": tools.feature_engineering_tool,
 }
 
 _ACTION_TO_TOOL_NAME = {

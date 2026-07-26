@@ -5,7 +5,25 @@ ACTION_KEYWORDS = {
     "retention": ["at risk", "at-risk", "retention", "churn", "disengag", "convert", "conversion", "dormant", "re-engage"],
     "eda": ["average", "distribution", "missing", "correlation", "how many", "count", "overview", "explore", "profile the data"],
     "segment": ["segment", "cluster", "group", "persona"],
-    "lookup": ["is customer", "customer id", "customer #"]
+    "lookup": ["is customer", "customer id", "customer #"],
+    "feature_engineering": [
+    "feature engineering",
+    "feature selection",
+    "selected features",
+    "preprocessing",
+    "pre processing",
+    "data preprocessing",
+    "data preparation",
+    "feature transformation",
+    "transformations",
+    "scaling",
+    "standardization",
+    "normalization",
+    "engineered features",
+    "how was the data prepared",
+    "how was the data processed",
+    "what features were used"
+],
 }
 
 
@@ -44,7 +62,7 @@ def _detect_action(query: str):
         if phrase in query_lower:
             return "segment"
 
-    for action in ["explain", "retention", "eda", "lookup", "segment"]:
+    for action in ["explain", "retention", "eda", "lookup", "segment","feature_engineering"]:
         for keyword in ACTION_KEYWORDS[action]:
             if keyword in query_lower:
                 return action

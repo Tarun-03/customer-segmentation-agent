@@ -11,6 +11,7 @@ REQUIRED_FIELDS = {
     "retention": [],
     "eda": [],
     "segment": [],
+    "feature_engineering": [],
 }
 
 CLARIFICATION_PROMPTS = {
@@ -55,6 +56,7 @@ def build_plan(parsed_intent: dict) -> dict:
         "retention": {"cluster": cluster},
         "eda": {"cluster": cluster},
         "segment": {},
+        "feature_engineering": {},
     }
 
     return {
@@ -62,4 +64,11 @@ def build_plan(parsed_intent: dict) -> dict:
         "args": args_by_action.get(action, {}),
         "ready": True,
         "clarification": None,
+    }
+
+    {
+    "tool": "feature_engineering",
+    "args": {},
+    "ready": True,
+    "clarification": None,
     }
